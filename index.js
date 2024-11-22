@@ -7,7 +7,8 @@ const Task = require('./src/models/task');
 const User = require('./src/models/user');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
-const auth = require('./src/authMiddleware')
+const auth = require('./src/middleware/authMiddleware')
+const errorHandler = require('./src/middleware/errorHandler')
 
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ require('dotenv').config();
 
 //Middlewares
 app.use(express.json());
+app.use(errorHandler);
 
 
 //Database
@@ -92,7 +94,7 @@ app.put('/tasks/:id',auth,async(req,res)=>{
   }catch(err){
     res.status(500).send(err);
   }
-})
+});
 
 //delete a task
 app.delete('/tasks/:id',auth,async(req,res)=>{
@@ -106,7 +108,7 @@ app.delete('/tasks/:id',auth,async(req,res)=>{
   }catch(err){
     res.status(500).send(err)
   }
-})
+});
 
 //register
 app.post('/register', async(req,res)=>{
@@ -138,7 +140,7 @@ app.post('/login', async(req,res)=>{
   }catch(err){
     res.status(500).send(err)
   }
-})
+});
 
 
 

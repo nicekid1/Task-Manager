@@ -12,7 +12,7 @@ const auth = (req, res, next)=>{
   }catch(err){
     res.status(400).send({ error: 'Invalid token.' });
   }
-}
+};
 
 module.exports = auth;
 
