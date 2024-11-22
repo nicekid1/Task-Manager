@@ -48,9 +48,19 @@ app.post('/tasks',auth,async(req,res)=>{
 
 //receive all tasks (get method)
 app.get('/tasks',auth,async(req,res)=>{
+  const{page=1, limit=10} = req.query;
   try{
-    const tasks = await Task.find();
-    res.status(200).send(tasks)
+    const tasks = await Task.find()
+      .limit(limit * 1)
+      // also can use => .limit(Number(limit))
+      .skip((page - 1)* limit)
+      .exec();
+    const count = await Task.countDocuments();
+    res.status(200).send({
+      tasks,
+      current : page,
+      total_page:Math.ceil(count/limit) 
+    });
   }catch(err){
     res.status(500).send(err)
   }
