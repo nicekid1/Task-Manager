@@ -7,6 +7,8 @@ const Task = require('./src/models/task');
 const User = require('./src/models/user');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
+const auth = require('./src/authMiddleware')
+
 require('dotenv').config();
 
 
@@ -28,7 +30,7 @@ app.get('/',(req,res)=>{
 //routes
 
 //add a new task (post method)
-app.post('/tasks',async(req,res)=>{
+app.post('/tasks',auth,async(req,res)=>{
   const{title, description} = req.body;
   const task = new Task({
     title,
@@ -43,7 +45,7 @@ app.post('/tasks',async(req,res)=>{
 });
 
 //receive all tasks (get method)
-app.get('/tasks',async(req,res)=>{
+app.get('/tasks',auth,async(req,res)=>{
   try{
     const tasks = await Task.find();
     res.status(200).send(tasks)
@@ -53,7 +55,7 @@ app.get('/tasks',async(req,res)=>{
 });
 
 //receive a specific task 
-app.get('/tasks/:id',async(req,res)=>{
+app.get('/tasks/:id',auth,async(req,res)=>{
   const taskId = req.params.id;
   try{
     const task = await Task.findById(taskId);
@@ -67,7 +69,7 @@ app.get('/tasks/:id',async(req,res)=>{
 });
 
 //update a task
-app.put('/tasks/:id',async(req,res)=>{
+app.put('/tasks/:id',auth,async(req,res)=>{
   const taskId = req.params.id;
   const updates = Object.keys(req.body);
   try{
@@ -93,7 +95,7 @@ app.put('/tasks/:id',async(req,res)=>{
 })
 
 //delete a task
-app.delete('/tasks/:id',async(req,res)=>{
+app.delete('/tasks/:id',auth,async(req,res)=>{
   const taskId = req.params.id;
   try{
     const task = await Task.findByIdAndDelete(taskId);
