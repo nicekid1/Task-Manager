@@ -7,6 +7,8 @@ const errorHandler = require('./src/middleware/errorHandler');
 const setupSwagger = require('./swagger');
 const taskRoutes = require('./src/routes/tasks');
 const authRoutes = require('./src/routes/auth');
+const cors = require("cors");
+
 
 require('dotenv').config();
 
@@ -15,6 +17,8 @@ require('dotenv').config();
 //Middlewares
 app.use(express.json());
 app.use(errorHandler);
+app.use(cors());
+
 
 //Swagger Setting
 setupSwagger(app);
